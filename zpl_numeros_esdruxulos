@@ -1,0 +1,41 @@
+#
+# Estudo Dos Números Esdrúxulos
+# 
+# abcd = a^a + b^b + c^c + d^d
+# 
+# abcde = a^a + b^b + c^c + d^d + e^e
+#
+# by Timmermans, Jacques
+#
+
+import math
+import random
+
+def Pesquisa4(M):
+  s = 0
+  for a in range(10):
+    for b in range(10):
+      for c in range(10):
+        for d in range(10):
+          x = a*10**3 + b*10**2+c*10**1 + d
+          y = a**a + b**b + c**c + d**d
+          if ( ( a != 0) and ( b !=0) and (c !=0) and (d !=0) and (x == y) ) :
+            print(a,b,c,d,x,y)
+            s = s+1    
+  print('Soluções = ', s)
+
+def Pesquisa5(M):
+  s = 0
+  for a in range(10):
+    for b in range(10):
+      for c in range(10):
+        for d in range(10):
+          for e in range(10):
+            x = a*10**4 + b*10**3+c*10**2 + d*10**1 + e
+            y = a**a + b**b + c**c + d**d + e**e
+            if ( ( a != 0) and ( b !=0) and (c !=0) and (d !=0) and (e !=0) and (x == y) ) :
+              print(a,b,c,d,e,x,y)
+              s = s+1
+  print('Soluções = ', s)
+
+Pesquisa4(1)
