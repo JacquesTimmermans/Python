@@ -1,0 +1,24 @@
+#
+# Estudo De Primos Gêmeos Pelo Teorema De P.A. Clements
+# 
+# by Timmermans, Jacques
+#
+print('OEIS A001097 = 3, 5, 7, 11, 13, 17, 19, 29, 31, 41, 43, 59, 61, 71, 73, 101, 103, 107, 109, 137, 139, 149, 151, 179, 181, 191, 193, 197, 199, ... ')
+print('')
+Max = 200
+def Fatorial(n):
+  if (n == 0): 
+    fat = 1
+  else:
+    fat = 1
+    j = n
+    while ( j>1 ):
+      fat = fat*j
+      j = j - 1
+  return fat  
+for i in range(Max): 
+  k = i + 2
+  p = ( 4*( Fatorial(k-1) + 1 ) + k ) % ( k*(k +2))
+  if ( p == 0 ) : 
+    print('Twin Prime',k,' ',k+2)
+# Fim
