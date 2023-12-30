@@ -1,0 +1,21 @@
+def test():
+  from music21 import instrument as j
+  sc1 = stream.Score()
+#    instruments = [Piccolo(), Glockenspiel(), 72, 69, 41, 27, 47, 1, 1, 1, 1, 34]
+  instrument = [j.Piccolo(), j.Xylophone(), j.Clarinet(), j.Oboe(), j.Violin(),
+                j.ElectricGuitar(), j.Harp(), j.Piano(), j.Piano(), j.Piano(), j.Piano(), j.ElectricBass()]
+  instrumentOctave = [3, 2, 2, 2, 1, 1, 1, 2, 1, 0, -1, -2]
+
+  for i in range(12):
+      inst = instrument[i]
+      if i &lt; 9:
+          inst.midiChannel = i
+      else:
+          inst.midiChannel = i + 1
+      part = addPart(instrument=inst)
+      if instrumentOctave[i] != 0:
+          part.transpose(12 * instrumentOctave[i], inPlace=True)
+      sc1.insert(0, part)
+  sc1.show()
+
+test
