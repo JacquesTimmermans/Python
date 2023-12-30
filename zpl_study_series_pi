@@ -1,0 +1,432 @@
+#
+# π by series calculator 
+#
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+import sys
+import time
+import math
+
+#
+# General Procedures && Functions
+# 
+
+def nS(s,vMAX,CodeAscii):
+  lString = ''
+  for j in range(20):
+    lString = lString + chr(CodeAscii)
+  n = vMAX - len(s) + 1
+  addString = lString[1:n]
+  newString = addString + s
+  return newString
+
+def TIMMERmans(TIMMER):
+
+  hTIME = TIMMER // 3600
+
+  mTIME = (TIMMER-hTIME*3600)//60
+  sTIME = (TIMMER-hTIME*3600-mTIME*60)
+  dTIME = sTIME - int(sTIME)
+
+  alphahTIME = nS(str(int(hTIME)),2,48)
+  alphamTIME = nS(str(int(mTIME)),2,48)
+  alphasTIME = nS(str(int(sTIME)),2,48)
+  alphadTIME = f'{dTIME:,.6f}'[2:8]
+
+  alphaTIME = alphahTIME + ':' + alphamTIME + ':' + alphasTIME + '.' + alphadTIME
+
+  return alphaTIME
+
+# 
+# Aux Procedures && Functions
+#
+
+def stPI(n):
+  sPI = str(math.pi)
+  if (n == 0):
+    kappa = 1
+  else:
+    kappa = n+2
+  sPIC = sPI[:kappa]
+  return sPIC
+
+def headCORRECT(NIX):
+
+  REF = str(math.pi)
+
+  sCOR = REF[:1]
+  sHEA = NIX[:1]
+
+  if ( sCOR == sHEA ):
+    h = 1
+  else:
+    h = 0
+    
+  return h
+  
+def decCORRECT(NIX):
+
+  REF = str(math.pi)
+
+  sum = 0
+  i = 1
+  flagSEARCH = True
+
+  while flagSEARCH: 
+
+    j = i+1; k = i + 1 + 1
+
+    sCOR = REF[j:k]
+    sDEC = NIX[j:k]
+
+    if ( sDEC == sCOR ):
+      flagSEARCH = True
+      sum += 1
+      i += 1
+    else:
+      flagSEARCH = False
+
+  return sum
+
+# 
+# π calc via François Viète, 1593
+#
+
+def calcViete(n):
+  invPi = 1
+  sumPast = 2
+  for j in range(n):
+      sumPast = math.sqrt(sumPast)
+      invPi *= sumPast / 2
+      sumPast += 2
+  Pi = 2 / invPi
+  return Pi
+
+# 
+# π calc via John Wallis, 1655
+#
+
+def calcWallis(n):
+  Pi = 1
+  for j in range(n):
+    k = j + 1
+    Pi *= ((2*k)/(2*k-1))*((2*k)/(2*k+1))
+  Pi *= 2
+  return Pi
+
+# 
+# π calc via Willian Gottfried Leibniz, 1682
+#
+
+def calcLeibniz(n):
+  sum = 0
+  for k in range(n):
+    sum += math.pow(-1,k)*1/(1+2*k)
+  Pi = 4*sum
+  return Pi
+
+# 
+# π calc via John Machin, 1706
+#
+
+def calcMachin(n):
+  sum = 0
+  for k in range(n):
+    sum += (math.pow(-1,k)/(2*k+1))*( (4/5**(2*k+1)) - (1/239**(2*k+1)) )
+  Pi = 4*sum
+  return Pi
+
+# 
+# π calc via Zeta Function
+#
+
+def calcZeta(n):
+  sum = 0
+  for j in range(n):
+    k = j + 1
+    sum += 1/(math.pow(k,2))
+  Pi = math.sqrt(6*sum)
+  return Pi
+
+#
+# π calc via Chudnovsky Brothers, 1989
+#
+
+def calcChudnovsky(n):
+
+  sum = 0
+
+  for k in range(n):
+
+    sup = math.factorial(6*k)*(545140134*k + 13591409)
+
+    A = float(math.factorial(3*k))
+    B = float(math.factorial(k)**3)
+    C = float(640320**(3*k))
+    D = float(math.sqrt(640320**3))
+
+    inf = A*B*C*D
+
+    sum += math.pow(-1,k)*sup/inf
+
+  invPi = 12*sum
+
+  Pi = 1 / invPi
+
+  return Pi
+
+#
+# Functions Library
+#
+
+def libFunctions(f,n):
+  if (f == 1):
+    y = calcViete(n)
+  if (f == 2):
+    y = calcWallis(n)
+  if (f == 3):
+    y = calcLeibniz(n)
+  if (f == 4):
+    y = calcMachin(n)
+  if (f == 5):
+    y = calcZeta(n)
+  if (f == 6):
+    y = calcChudnovsky(n)
+  return y
+
+#
+# Dados && Impressão Dos Gráficos Comuns
+#
+
+def actionsAlpha(FUNC,GRAF):
+  
+  print(" ")
+
+  max = int(input("How many max iterations ? "))
+  step = int(input("How many steps? "))
+  fator = input("Type of growth (+|*) ? ")
+  print(" ")
+
+  j=1
+  while (j<=max):
+
+    approX = libFunctions(FUNC,j)
+
+    DIF = math.pi - approX
+    
+    h = headCORRECT(str(approX))
+    n = decCORRECT(str(approX))
+
+    if (GRAF == 1):
+      gINF = f'{approX:,.20f}'
+
+    if (GRAF == 2):
+      gINF = f'{DIF:,.16f}'
+
+    if (GRAF == 3):
+      if ( h == 0 ):
+        gINF = '@'
+      else:
+        gINF = stPI(n)
+
+    if (GRAF == 4):
+      if ( h == 0 ):
+        gINF = '@'
+      else:
+        gINF = str(n)
+
+    pINFO = '(' + str(j) + ',' + gINF + ')'
+
+    print(pINFO)
+
+    if (fator == '+'):
+      j += step
+    else:
+      j = j*step
+
+#
+# Varredura Para Gráfico Especial
+#
+
+def calcLevel(FUNC,L):
+
+  k = 1
+  flagSEARCH = True
+
+  while flagSEARCH:
+
+    approX = libFunctions(FUNC,k)
+      
+    n = decCORRECT(str(approX))
+    
+    if ( n >= L ):
+      
+      flagSEARCH = False
+      
+    else:
+      
+      k += 1
+
+    # if ( k % 1000 == 0 ):
+      # print(' k = ' + str(k))
+
+  return k
+
+#
+# Gráfico Especial
+#
+
+def actionBeta(FUNC):
+
+  print(" ")
+  MAXdigits = int(input("How many correct digits ? "))
+  # ... after the decimal point
+
+  # Liga o cronometro
+
+  startTIME = time.time()
+  print(" ")
+  print('START ',TIMMERmans(0))
+  print(' ')
+
+  # Varredura dos níveis
+
+  for j in range(MAXdigits+1):
+
+     # Verifica o mínimo de lançamentos
+
+     k = calcLevel(FUNC,j)
+
+     # Encerra o tempo
+
+     endTIME = time.time()
+
+     # Prepara o registro
+
+     lINFO = '(' + str(j) + ',' + str(k) + ')' + ' :: ' + TIMMERmans(endTIME-startTIME)
+
+    # Imprime o registro
+
+     print(lINFO)
+    
+    # Armazena
+
+    # D[j] = [ j, transitPT, math.log(transitPT)]
+
+#
+# Seletor Do Tipo De Gráfico
+#
+
+def GRAFF(FUNC):
+
+  typeOfGraph = [
+    
+  '(k,π) : Brutal calculation',
+  '(k,Δ) : Calculation of differences',
+  '(k,ε) : Exact digits',
+  '(k,n) : Number of exact digits',
+  '(D,k) : Exact D versus k '
+  ]
+
+  sEXIT = True
+  while sEXIT:
+    
+    print('~~~ Type of Graph ~~~')
+    
+    print(' ')
+
+    for i in range(len(typeOfGraph)):
+      print(str(i+1) + ' ... ' + typeOfGraph[i])
+    
+    print(' ')
+    
+    try:
+      
+      GRAF = int(input('? '))
+      
+      CND = ( (GRAF >= 1) and (GRAF <= 5 ) )
+      
+      sEXIT = not(CND)
+      
+    except:
+      
+      print("Please enter a numerical value")
+      sEXIT = True
+      
+  if ( (GRAF >= 1) and (GRAF <= 4) ):
+    
+    actionsAlpha(FUNC,GRAF)
+  
+  if (GRAF == 5):
+    
+    actionBeta(FUNC)
+
+#
+# Principal
+#
+
+def Principal():
+
+  Menu = [ 
+    'François Viète, 1593',
+    'John Wallis, 1655',
+    'Gottfried Wilhelm Leibniz, 1682',
+    'John Machin, 1706',
+    'Georg F. B. Riemann, *',
+    'Gregory & David Chudnovsky, 1989',
+    'Exit'
+  ]
+
+  wEXIT = True
+
+  while (wEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+
+      os.system('clear')
+      print('π by series calculator | v 0.0')
+      print('© 2023 Jacques Timmermans')
+      print(' ')
+
+      print('... General Control ...')
+      print(' ')
+      for i in range(len(Menu)):
+        print(str(i+1) + ' ... ' + Menu[i])
+      
+      print(' ')
+
+      try:
+
+        FUNC = int(input('? '))
+        CND = ( (FUNC >= 1) and (FUNC <= len(Menu) ) )
+        sEXIT = not(CND)
+
+      except:
+
+        print("Please enter a numerical value")
+        sEXIT = True
+
+    os.system('clear')
+
+    if ( (FUNC >= 1) and (FUNC <=(len(Menu)-1) ) ):
+      
+      print('... ' + Menu[FUNC-1] + ' ...')
+      print(' ')
+      GRAFF(FUNC)
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == len(Menu)):
+      wEXIT = False
+      print('Thank you for using the π by series calculator!')
+      sys.exit()
+
+Principal()
