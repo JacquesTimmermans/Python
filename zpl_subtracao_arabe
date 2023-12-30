@@ -1,0 +1,24 @@
+#
+# Estudo Da Subtração Árabe
+#
+# by Timmermans, Jacques
+#
+
+def Analise(m):
+  s = 0
+  for x in range(10):
+    for y in range(10):
+      for w in range(10):
+        for z in range(10):
+          for a in range(10):
+            for b in range(10):
+              for c in range(10):
+                for d in range(10):
+                  if ( (x>a) and (y<=b) and (w>c) and (z<=d) ):
+                    s = s + 1
+  print('Soluções Árabes = ',s)
+  print('Capacidade = ',(s/100000000)*100)
+
+Analise(0)
+
+# Fin
