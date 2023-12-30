@@ -1,0 +1,43 @@
+#
+# Routines for studying the Python language
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+
+def paneControl():
+  print(' ')
+  div = int(input("Divisor ? "))
+  print(' ')
+  try:
+    NUM = 4 / div 
+    print('Resultado = ',NUM)
+  except:
+    print('Deu Bode Preto!')
+  print(' ')
+  print('Case Closed')
+  print(' ')
+
+def fatorial(n):
+  if (n == 0):
+    fat = 1
+  else:
+    fat=1
+    j=1
+  while (j<=n):
+    fat = fat*j
+    j = j + 1
+  return fat
+
+def PythonStudy():
+  os.system('clear')
+  print(' ')
+  print('Routines for studying the Python language | v 0.0')
+  print('© 2023 Jacques Timmermans')
+  paneControl()
+  print('Thank you for using the Routines for studying the Python language')
+
+PythonStudy()
