@@ -1,0 +1,395 @@
+#
+# Monte Carlo Calculator 
+#
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+import sys
+import time
+import math
+import random
+
+def BF(f,x):
+  if (f == 1):
+    y = x**2
+  if (f == 2):
+    y = math.exp(-x**2)
+  if (f == 3):
+    y = math.sin(x)
+  if (f == 4):
+    y = (math.sin(x))**2
+  if (f == 5):
+    y = 1/(x+1)
+  if (f == 6):
+    y = math.exp(x)
+  if (f == 7):
+    if (x != 0):
+      y = math.sin(x)/x
+    else:
+      y = 1
+  if (f == 8):
+    y = -x**2
+  return y
+
+def normString(s,vMAX):
+  lString = '                    '
+  n = vMAX - len(s)
+  addString = lString[1:n]
+  newString = s + addString
+  return newString
+
+def completaZeros(s,max):
+  j = 0
+  sOUT = s
+  while ( j <= ( max - len(s) ) ):
+    sOUT = chr(48) + sOUT
+    j = j + 1
+  return sOUT
+
+def minmaxFunc(FUNC,INF,SUP,mmDATA,tDATA):
+  MAX = 0
+  MIN = 0
+  DIV = 100000
+  DX = (SUP - INF) / DIV
+  for j in range(DIV+1):
+    x = INF + j*DX
+    y = BF(FUNC,x)
+    if (y >= MAX):
+      MAX = y
+    if (y <= MIN):
+      MIN = y
+
+  if (mmDATA == 0):
+    MAXMIN = MIN
+  else:
+    MAXMIN = MAX
+
+  if (tDATA == 1):
+    print(MAXMIN)
+
+  return MAXMIN
+
+def MonteCarlo(FUNC,MAX,INF,SUP,tM):
+
+  ITV = ( SUP - INF )
+
+  NEG= math.fabs(minmaxFunc(FUNC,INF,SUP,0,0))
+
+  LMT = math.fabs(minmaxFunc(FUNC,INF,SUP,1,0))
+
+  # print('NEG = ', NEG)
+  # print('LMT = ', LMT)
+
+  j = 0
+  s = 0
+
+  while (j <= MAX):
+
+    x = ITV*math.fabs(random.random())
+
+    y = LMT*math.fabs(random.random())
+
+    z = NEG*math.fabs(random.random())
+
+    fy = math.fabs(BF(FUNC,x+INF))
+
+    # print('z = ',z,' fy = ',fy)
+
+    if (tM == 0):
+      if (z <= fy):
+        s = s + 1
+    else:
+      if (y <= fy):
+        s = s+1
+
+    j = j + 1
+
+  if (tM == 0):
+    I = (s/MAX)*ITV*NEG
+  else:
+    I = (s/MAX)*ITV*LMT
+
+  return I
+
+def Apollo(FUNC,MAX,INF,SUP,pPRINT):
+
+  INTEGRAL = 0.0
+
+  nDIV = 100000
+  ITV = (SUP - INF)
+  DX = ITV / nDIV
+
+  startINT = INF
+
+  if (BF(FUNC,startINT) !=0):
+    sFUNC = int(BF(FUNC,startINT) / math.fabs(BF(FUNC,startINT)))
+  else:
+    sFUNC = 0
+
+  pVARREDURA = startINT
+
+  zEXIT = True
+  while (zEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+
+      pVARREDURA = pVARREDURA + DX
+
+      if (BF(FUNC,pVARREDURA) !=0):
+        sNEW = int(BF(FUNC,pVARREDURA) / math.fabs(BF(FUNC,pVARREDURA)))
+      else:
+        sNEW =0
+
+      sIFF = f'{pVARREDURA:,.3f}'  + ' ' + f'{BF(FUNC,pVARREDURA):,.3f}' + ' ' + str(FUNC) + ' ' + str(sNEW)
+
+      # print(sIFF)
+
+      sEXIT = ( ( sFUNC == sNEW ) and ( pVARREDURA <= SUP ) )
+
+    if (sFUNC == 0):
+      mTC = 0
+      signoF = '0'
+    else:
+      if (sFUNC > 0):
+        mTC = sFUNC*MonteCarlo(FUNC,MAX,startINT,pVARREDURA,1)
+        signoF = '+'
+      else:
+        mTC = sFUNC*MonteCarlo(FUNC,MAX,startINT,pVARREDURA,0)
+        signoF = '-'
+
+    INTEGRAL = INTEGRAL + mTC
+
+    infoP = signoF + '[' + f'{startINT:,.3f}' + ',' + f'{pVARREDURA:,.3f}' + '] = ' + f'{mTC:,.6f}'
+
+    if (pPRINT == 1):
+      print(infoP)
+
+    startINT = pVARREDURA
+    sFUNC = sNEW
+    zEXIT = (pVARREDURA <= SUP)
+
+  return INTEGRAL
+
+def AnaliseMonteCarlo(FUNC,MAX,INF,SUP):
+  n = 1
+  for i in range(MAX+1):
+    LineInfo = "n = " + str(i) + " (" + completaZeros(str(n),MAX) + ") I = " + str(Apollo(FUNC,n,INF,SUP,0))
+    print(LineInfo)
+    n = n*10
+
+def GraficoMonteCarlo(FUNC,max,INF,SUP,pPRINT):
+  for i in range(max):
+    Coordinate = '('+ str(i+1) + ',' + str(Apollo(FUNC,i+1,INF,SUP,pPRINT)) +')'
+    print(Coordinate)
+
+def Leistungstest(maxTest):
+
+  startTIME = time.time()
+
+  sLIMIT =0
+  
+  for j in range(maxTest):
+    if ( len(listFunc[j]) > sLIMIT):
+      sLIMIT = len(listFunc[j])
+  
+  print('f(x)','   ','Integral [0,π]')
+  print('.......................................')
+  for j in range(maxTest):
+    print(normString(listFunc[j],sLIMIT+1),Apollo(j+1,10**6,0,math.pi,0))
+    
+  endTIME = time.time()
+  
+  print(' ')
+  print('Em '+f'{(endTIME - startTIME):,.3f}' + ' segundos')
+
+def guideFunctions():
+  
+  for j in range(len(listFunc)):
+    print(str(j+1)+' ... ' +listFunc[j])
+    
+  print('9 ... Exit')
+  
+  print(' ')
+  
+  try:
+    FUNC = int(input('? '))
+    CND = ( (FUNC >= 1) and (FUNC <= len(listFunc) ) )    
+    sEXIT = not(CND or (FUNC ==9))
+  except:
+    print("Please enter a numerical value")
+    sEXIT = True
+    
+  os.system('clear')
+  
+  if (FUNC == 9):
+    print(' ')
+    print('Thank you for using the Monte Carlo Calculator')
+    sys.exit()
+    
+  print(' ')
+  print('... Selected Function ...')
+  print(' ')
+  print('f(x) = '+listFunc[FUNC-1])
+  print(' ')
+  print('... Intervalo De Integração ...')
+  print(' ')
+  print('[a,b]')
+  print(' ')
+  
+  sEXIT = True
+  while (sEXIT):
+    try:
+      INF = float(input("a ? "))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+    
+  sEXIT = True
+  while (sEXIT):
+    try:
+      SUP = float(input("b ? "))
+      sEXIT = not( (SUP > INF ) )
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+      
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    print('... Actions ...')
+    print(' ')
+    print('L ... List')
+    print('A ... Analyse')
+    print('G ... Graph')
+    print('E ... Exit')
+    print(' ')
+    PATH = input('? ')
+    sEXIT = not( (PATH == 'L' ) or (PATH == 'A') or (PATH == 'G') or (PATH == 'E') )
+    if ( (PATH == 'L' ) or (PATH == 'A') ) :
+      
+      sEXIT = True
+      while (sEXIT):
+        os.system('clear')
+        print('⟨ List ⟩')
+        print(' ')
+        try:
+          MAX = int(input("1 ... 10ⁿ Samples, n Max ? "))
+          sEXIT = not( (MAX > 0 ) and (MAX <= 7) )
+        except:
+          print("Please enter a numerical value")
+          sEXIT = True
+          
+      os.system('clear')
+      print(' ')
+      print('... Selected Function ...')
+      print(' ')
+      print('f(x) = '+listFunc[FUNC-1])
+      print(' ')
+      print('... Intervalo De Integração ...')
+      print(' ')
+      sITV = '['+str(INF)+','+str(SUP)+']'
+      print(sITV)
+      print(' ')
+      print('... Minimus ...')
+      print(' ')
+      minmaxFunc(FUNC,INF,SUP,0,1)
+      print(' ')
+      print('... Maximus ...')
+      print(' ')
+      minmaxFunc(FUNC,INF,SUP,1,1)
+      print(' ')
+      
+      if (PATH == 'L'):
+        print('... Integration by number of samples ...')
+        print(' ')
+        AnaliseMonteCarlo(FUNC,MAX,INF,SUP)
+      else:
+        print('... Integration by intervals ...')
+        print(' ')
+        Integral = Apollo(FUNC,10**MAX,INF,SUP,1)
+        print('')
+        print('... Result ...')
+        print(' ')
+        print(Integral)
+        
+    if (PATH == 'G' ):
+      os.system('clear')
+      print('⟨ Graph ⟩')
+      print(' ')
+        
+      sEXIT = True
+      while (sEXIT):
+        try:
+          max = int(input("Max ? "))
+          sEXIT = not( (max > 0 ) and (max <= 200) )
+        except:
+          print("Please enter a numerical value")
+          sEXIT = True
+          
+      print(' ')
+      GraficoMonteCarlo(FUNC,max,INF,SUP,0)
+
+def Principal():
+
+  wEXIT = True
+  while (wEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+      
+      os.system('clear')
+      print(' ')
+      print('Monte Carlo Calculator | v 0.0')
+      print('© 2023 Jacques Timmermans')
+      print(' ')
+      
+      print('... General Control ...')
+      print(' ')
+      print('1 ... Functions')
+      print('2 ... Leistungstest')
+      print('3 ... Exit')
+      
+      print(' ')
+      
+      try:
+        FUNC = int(input('? '))
+        CND = ( (FUNC >= 1) and (FUNC <= 3 ) )
+        sEXIT = not(CND)
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+        
+    os.system('clear')
+    
+    if (FUNC == 1):
+      print('... Functions ...')
+      print(' ')
+      guideFunctions()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+      
+    if (FUNC == 2):
+      print('... Leistungstest ...')
+      print(' ')
+      Leistungstest(len(listFunc))
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+      
+    if (FUNC == 3):
+      wEXIT = False
+    
+  print('Thank you for using the Monte Carlo Calculator!')
+  sys.exit()
+
+listFunc = [ "x²", "e^(-x²)", 'sin(x)', 'sin²(x)' , '1/(x+1)', 'e^x', 'sin(x)/x', '–x²' ]
+
+Principal()
