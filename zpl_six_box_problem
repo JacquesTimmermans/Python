@@ -1,0 +1,34 @@
+#
+# Six Box Problem
+#
+# by Jacques Timmermans
+#
+print(' ')
+print('Six Box Problem')
+print(' ')
+print('$a $g são $c, e $e $c são $s. Considerando que existem $t $g no total, $r são $s e $i das $g não $s não são $c, quantos $c $s que não são $g existem?')
+print(' ')
+L = input('Classe esquerda $g ? ')
+R = input('Classe direita $c ? ')
+C = input('Separador $s ? ')
+G = int(input('Quantos esquerdos $t ? '))
+S = int(input('Quantos separados $r ? '))
+X = int(input('Quantos identificados $i ? '))
+T = int(input('Quantos são anômalos $a ? '))
+E = int(input('Quantos são especiais $e ? '))
+# print(' ')
+# print('O Problema ...')
+print(' ')
+print(T,L,'são',R,'e',E,R,'são',C,'. Considerando que existem',G,L,'no total e',S,'são',C,'e',X,'das',L,'não',C,'não são',R,', quantos',R,C,'que não são',L,'existem?')
+print(' ')
+# Resolução
+Y = (G - S - X)
+Z = (T - Y)
+W = (S - Z)
+J = (E - Z)
+print('Solução ...')
+print(' ')
+print(X,'|',Y,'|',' ? ')
+print('..............')
+print(W,'|',Z,'|',J)
+# Fim
