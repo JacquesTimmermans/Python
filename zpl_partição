@@ -1,0 +1,151 @@
+#
+# Estudo Partição
+# 
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+import sys
+import math
+import random
+
+def ramanujanhardy(n):
+  p = int(( 1 / ( 4 * n * math.sqrt(3)))*math.exp(2*math.pi*math.sqrt(n/6)))
+  return p
+
+def calcLista(MAX):
+  for n in range(MAX):
+    info = str(n+1) + " " +  str(ramanujanhardy(n+1))
+    print(info)
+
+def partition(n):
+  MAX = 5000000
+  P = [] ; N = [] ; i = 1
+  while ( i <=MAX ):
+    t = int(n*random.random())+1
+    s = ''
+    N.clear()
+    for j in range(t):
+      N.append(int(n*random.random())+1)
+
+    N.sort()
+    N.reverse()
+    for j in range(t):
+      k = N[j]
+      s += str(k)
+      if ( (t!=1) and (j!=(t-1)) ):
+        s += '+'
+    i += 1
+    if (eval(s) == n):
+      if s not in P:
+        P.append(s)
+        # print(s)
+  print('Partition of '+str(n))
+  print(' ')
+  P.sort()
+  for j in range(len(P)):
+    print(P[j])
+  print(' ')
+
+def generalreport(MAX):
+  for j in range(MAX):
+    partition(j+1)
+
+def PartitionControl():
+  sEXIT = True
+  while (sEXIT):
+    try:
+      MAX = int(input('Max ? '))
+      CND = (MAX > 0)
+      sEXIT = not(CND)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  print(' ')
+  generalreport(MAX)
+    
+def RamanujanHardy():
+  sEXIT = True
+  while (sEXIT):
+    try:
+      MAX = int(input('Max ? '))
+      CND = (MAX > 0)
+      sEXIT = not(CND)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  print(' ')
+  calcLista(MAX)
+
+#
+# Principal
+#
+
+def Principal():
+
+  Menu = [ 
+    'Ramanujan & Hardy Formula',
+    'Partition Generator',
+    'Exit'
+  ]
+
+  wEXIT = True
+
+  while (wEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+
+      os.system('clear')
+      print(' ')
+      print('Partition | v 0.0')
+      print('© 2023 Jacques Timmermans')
+      print(' ')
+
+      print('... General Control ...')
+      print(' ')
+      for i in range(len(Menu)):
+        print(str(i+1) + ' ... ' + Menu[i])
+
+      print(' ')
+
+      try:
+
+        FUNC = int(input('? '))
+        CND = ( (FUNC >= 1) and (FUNC <= len(Menu) ) )
+        sEXIT = not(CND)
+
+      except:
+
+        print("Please enter a numerical value")
+        sEXIT = True
+
+    os.system('clear')
+
+    if (FUNC == 1):
+
+      print('... ' + Menu[FUNC-1] + ' ...')
+      print(' ')
+      RamanujanHardy()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 2):
+      
+      print('... ' + Menu[FUNC-1] + ' ...')
+      print(' ')
+      PartitionControl()
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 3):
+      wEXIT = False
+      print('Thank you for using the π by series calculator!')
+      sys.exit()
+
+Principal()
