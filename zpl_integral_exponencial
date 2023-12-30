@@ -1,0 +1,529 @@
+#
+# Calculo Da Integral e^(-x²)
+#
+# by
+#
+# Jacques Timmermans
+
+import os
+import sys
+import time
+import math
+
+#
+# 0 ... Primitiva Série
+#
+
+def primitiva(x):
+  MAX = 180
+  f = 0
+  for n in range(MAX):
+    f = f + ( (-1)**n / ( (2*n +1)*math.factorial(n) ) ) * x**(2*n + 1)
+  return f
+
+#
+# 0 ... Primitiva Sigmoide
+#
+
+def sigmoide(x,cst):
+  y = math.sqrt(math.pi)*( 1 / ( 1 + math.exp(-cst* x) ) - (1/2) )
+  return y
+
+#
+# 0 ... Integral
+#
+
+def integral(a,b):
+  I = primitiva(b) - primitiva(a)
+  return I
+
+#
+# 1 ... Calc Via A Primitiva Série
+#
+
+def primitivaCALC():
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    print(' ... Primitive Calc ...')
+    print(' ')
+    try:
+      x = float(input('x? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  print(' ')
+  print('f(' + str(x) + ') = ' + str(primitiva(x)) )
+
+#
+# 2 ... Calc Via Sigmoide
+#
+
+def sigmoideCALC():
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    print(' ... Sigmoide Calc ...')
+    print(' ')
+    try:
+      x = float(input('x? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  print(' ')
+  print('f(' + str(x) + ' | ' + f'{cst:,.6f}' + ') = ' + str(sigmoide(x,cst)) )
+
+#
+# 3 ... Tabela Mathstodon
+#
+
+def tableMathstodon():
+  for j in range(9):
+    I = integral(0,(j/8)*math.pi)
+    lPRINT = chr(92) + 'frac{' + str(j) + '}{8}' + chr(92) + 'pi && ' + f'{I:,.6f}' + ' ' + chr(92) + chr(92)
+    print(lPRINT)
+
+#
+# 4 ... Tabela TikZ | Série
+#
+
+def tableTikz():
+  sEXIT = True
+  while (sEXIT):
+    try:
+      Div = int(input('Number of points? '))
+      sEXIT = not(Div > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      sPoint = float(input('Left Limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      ePoint = float(input('Right Limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  # Div = 20
+  # sPoint = -5
+  # ePoint = +5
+
+  print(' ')
+  dx = (ePoint - sPoint) / Div
+  px = sPoint
+  while (px <= ePoint):
+    fx = primitiva(px)
+    lPRINT = '(' + f'{px:,.3f}' + ',' + f'{fx:,.6f}' + ')'
+    print(lPRINT)
+    px = px + dx
+
+#
+# 5 ... Tabela TikZ | Sigmoide
+#
+
+def tableSigmoide():
+  sEXIT = True
+  while (sEXIT):
+    try:
+      Div = int(input('Number of points? '))
+      sEXIT = not(Div > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      sPoint = float(input('Left Limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      ePoint = float(input('Right Limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  # Div = 20
+  # sPoint = -5
+  # ePoint = +5
+
+  print(' ')
+  dx = (ePoint - sPoint) / Div
+  px = sPoint
+  while (px <= ePoint):
+    fx = sigmoide(px,cst)
+    lPRINT = '(' + f'{px:,.3f}' + ',' + f'{fx:,.6f}' + ')'
+    print(lPRINT)
+    px = px + dx
+
+#
+# 6 ... Table | Serie × Sigmoide
+#
+
+def tableConfront(cst):
+  sEXIT = True
+  while (sEXIT):
+    try:
+      Div = int(input('Number of points? '))
+      sEXIT = not(Div > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      sPoint = float(input('Left limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+  sEXIT = True
+  while (sEXIT):
+    try:
+      ePoint = float(input('Right limit? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  # Div = 20
+  # sPoint = -5
+  # ePoint = +5
+
+  print(' ')
+  dx = (ePoint - sPoint) / Div
+  px = sPoint
+  while (px <= ePoint):
+    fx = primitiva(px)
+    sx = sigmoide(px,cst)
+    delta = fx - sx
+    if (fx !=0 ):
+      deltap = (delta / fx)*100
+    else:
+      deltap=0
+    lPRINT = f'{px:,.3f}' + ' ' + f'{fx:,.3f}' + ' ' + f'{sx:,.3f}' + ' ' + f'{delta:,.3f}' + ' ' + f'{deltap:,.3f}'
+    print(lPRINT)
+    px = px + dx
+
+#
+# 7 ... Constant Research
+#
+
+def pMASKARA(var,casas):
+  if (casas == 0):
+    pMSK = f'{var:,.0f}'
+  if (casas == 1):
+      pMSK = f'{var:,.1f}'
+  if (casas == 2):
+    pMSK = f'{var:,.2f}'
+  if (casas == 3):
+      pMSK = f'{var:,.3f}'
+  if (casas == 4):
+    pMSK = f'{var:,.4f}'
+  if (casas == 5):
+      pMSK = f'{var:,.5f}'
+  if (casas == 6):
+    pMSK = f'{var:,.6f}'
+  if (casas == 7):
+      pMSK = f'{var:,.7f}'
+  if (casas == 8):
+    pMSK = f'{var:,.8f}'
+  if (casas == 9):
+      pMSK = f'{var:,.9f}'
+  if (casas == 10):
+    pMSK = f'{var:,.10f}'
+  if (casas == 11):
+      pMSK = f'{var:,.11f}'
+  if (casas == 12):
+    pMSK = f'{var:,.12f}'
+
+  return pMSK
+
+def varreduraC(Div,sPoint,ePoint,constant,cstMAX,ddt,nMASK):
+
+  # constant = 2.406625
+  # cstMAX = 2.406635
+  # ddt = 0.000001 # 6 casas
+
+  magicCst = 1
+
+  print(' ')
+
+  startBANDEIRA = True
+
+  while (constant <= cstMAX):
+
+    dx = (ePoint - sPoint) / Div
+    px = sPoint
+
+    startFLAG = True
+
+    while (px <= ePoint):
+
+      fx = primitiva(px)
+      sx = sigmoide(px,constant)
+
+      delta = fx - sx
+
+      if (fx !=0 ):
+        deltap = (delta / fx)*100
+      else:
+        deltap = 0
+
+      px = px + dx
+
+      if (startFLAG):
+        maxref = abs(delta)
+      else:
+        if (abs(delta) > maxref):
+          maxref = abs(delta)
+          xref = px
+
+      startFLAG = False
+
+    if (xref >= 0):
+      pSTRING = '+'
+    else:
+      pSTRING = ''
+
+    lPRINT = pSTRING + f'{xref:,.3f}' + ' :: ' + '(' + pMASKARA(constant,nMASK) + ',' + f'{maxref:,.9f}' + ')'
+    print(lPRINT)
+
+    if (startBANDEIRA):
+      minref = maxref
+    else:
+      if (maxref < minref):
+        minref = maxref
+        magicCst = constant
+
+    startBANDEIRA = False
+
+    constant = constant + ddt
+
+  print(' ')
+
+  pMASK = pMASKARA(magicCst,nMASK)
+
+  print('ζ   = ' + pMASK)
+
+  print('min = ' + f'{minref:,.9f}')
+
+  return magicCst
+
+def findConstantFull():
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      Div = int(input('Number of points [ 10000 ] ? '))
+      sEXIT = not(Div > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      sPoint = float(input('Left limit [ -5 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      ePoint = float(input('Right limit [ 5 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      constant = float(input('Initial Constant [ 2.406625 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      cstMAX = float(input('End Constant [ 2.406635 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      ddt = float(input('Step [ 0.000001 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      depthSEARCH = int(input('Depth [ 8 ] ? '))
+      sEXIT = False
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  startTIME = time.time()
+
+  d = Div
+  s = sPoint
+  e = ePoint
+  c = constant
+  m = cstMAX
+  t = ddt
+
+  zeta = c
+
+  flagS = True
+
+  for j in range(depthSEARCH + 1):
+
+    print(' ')
+    print('*** Depth = ' + str(j) + ' ***')
+    print(' ')
+
+    if flagS:
+      iC = constant
+      eC = cstMAX
+    else:
+      iC = zeta - 2*t
+      eC = zeta + 2*t
+      t = t/10
+
+    # lINFO = 'ζ ∈ [' + f'{iC:,.6f}' + ',' + f'{eC:,.6f}' + ']'
+
+    lINFO = 'ζ ∈ [' + pMASKARA(iC,j) + ',' + pMASKARA(eC,j) + ']'
+
+    print(lINFO)
+    # print(' ')
+
+    flagS = False
+
+    zeta = varreduraC(d,s,e,iC,eC,t,j)
+
+  endTIME = time.time()
+
+  print(' ')
+  print('Search Performed In ' + f'{(endTIME - startTIME):,.3f}' + ' seconds')
+
+def Principal(cst):
+
+  wEXIT = True
+  while (wEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+
+      os.system('clear')
+      print(' ')
+      print('Exponential Integral Calculator | v 0.0')
+      print('© 2023 Jacques Timmermans')
+      print(' ')
+      print('... General Control ...')
+      print(' ')
+      print('1 ... Single Calc Primitiva')
+      print('2 ... Single Calc Sigmoide')
+      print('3 ... Mathstodon Table')
+      print('4 ... TikZ Table | Serie')
+      print('5 ... TikZ Table | Sigmoide')
+      print('6 ... Table | Serie × Sigmoide')
+      print('7 ... Advanced Search for the ζ constant')
+      print('8 ... Exit')
+      print(' ')
+      try:
+        FUNC = int(input('? '))
+        CND = ( (FUNC >= 1) and (FUNC <= 8 ) )
+        sEXIT = not(CND)
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    os.system('clear')
+
+    if (FUNC == 1):
+      primitivaCALC()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 2):
+      sigmoideCALC()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 3):
+      print('... Mathstodon Table ...')
+      print(' ')
+      tableMathstodon()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 4):
+        print('... TikZ Table | Serie ...')
+        print(' ')
+        tableTikz()
+        print(' ')
+        anyKEY = input('Press «ENTER» to Continue ')
+        wEXIT = True
+
+    if (FUNC == 5):
+      print('... TikZ Table | Sigmoide ...')
+      print(' ')
+      tableSigmoide()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 6):
+      print('... Table | Serie × Sigmoide ...')
+      print(' ')
+      tableConfront(cst)
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 7):
+      print('... Advanced Search for the ζ constant ...')
+      print(' ')
+      findConstantFull()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 8):
+      wEXIT = False
+
+  print('Thank you for using the Exponential Integral Calculator!')
+  sys.exit()
+
+cst = 2.406631
+
+Principal(cst)
