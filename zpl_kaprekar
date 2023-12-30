@@ -1,0 +1,232 @@
+#
+# Kaprekar analyzer
+#
+# v 0.0.0
+#
+# Estudo Da Constante Kaprekar
+#
+# by 
+# 
+# Jacques Timmermans
+#
+
+import os
+import math
+
+def Kaprekar(n,keyP):
+
+  #
+  # ATOMIZAÇÃO
+  #
+  # Este fragmento do código atomiza o número decimal n em seus dígitos x = milhar, y = centena, w = dezena & z = unidade e armazena no Vetor[]
+  #
+  
+  Vetor = [0,0,0,0]
+  t = n
+  for k in range(4):
+    Vetor[k] = t // 10**(3-k)
+    # print(k,Vetor[k])
+    t = t - Vetor[k]*10**(3-k)
+  # print(Vetor[0],Vetor[1], Vetor[2],Vetor[3])
+  # Vetor = [x,y,w,z]
+
+  # 
+  # ORDENAÇÃO
+  #
+  # Este fragmento do código ordena o vetor Vetor[] em ordem decrescente mediante o clássico algoritmo Buble Sort
+  #
+  
+  for i in range(4):
+    j=i+1
+    while (j<=3):
+      # print(i, " ",j)
+      if (Vetor[j] > Vetor[i]):
+        temp = Vetor[i]
+        Vetor[i] = Vetor[j]
+        Vetor[j] = temp
+      j = j + 1
+  # print(Vetor[0],Vetor[1], Vetor[2],Vetor[3])
+
+  # 
+  # CÁLCULO
+  # 
+  # Este Fragmento do código calcula uma etapa Kaprecar mediante a diferença entre o número ordenado decrescentemente e o número ordenado crescentemente
+  #
+
+  Decrescente = Vetor[0]*10**3 + Vetor[1]*10**2 + Vetor[2]*10**1 + Vetor[3]*10**0 
+
+  Crescente = Vetor[3]*10**3 + Vetor[2]*10**2 + Vetor[1]*10**1 + Vetor[0]*10**0
+
+  Magic = Decrescente - Crescente
+
+  if (keyP == 1):
+    print(n,' :: ',Decrescente,' - ',Crescente, ' = ',Magic)
+  
+  return Magic
+  
+def Deep(n,keyP):
+
+  #
+  # CONTABILIZAÇÃO
+  #
+  # Este fragmento do código contabiliza o número de etapas recursivas necessárias até que o processo entre em estagnação; posto que chegou a constante de Kaprekar 6174
+  
+  kpr = n
+  itr = 1
+  while (kpr != 6174):
+    kpr = Kaprekar(kpr,keyP)
+    # print(kpr," ",itr)
+    itr = itr + 1
+  Profundidade = itr - 1
+  if (keyP == 1):
+    print('--------------------------------')
+    print('∑ = ',Profundidade)
+  return Profundidade
+
+def NotaMusical(m):
+
+  #
+  # MUSICALIZAÇÃO
+  # 
+  # Este fragmento do código gera uma nota musical associada a profundidade Kaprekar
+  # 
+  # Ascii ('C') = 67
+  # AScii ('c') = 99
+  #
+  
+  if (m==0):
+    cNota = chr(67)
+  else:
+    cNota = chr(99+m-1)
+  Nota = '\ga{' + cNota + '}'
+  return Nota
+  
+def Analise(M):
+
+  #
+  # Vetor Do Histograma
+  #
+  
+  Stat = [ 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 ]
+
+  #
+  # Contador De Soluções
+  #
+  
+  s = 0
+
+  #
+  # VARREDURA DOS DÍGITOS
+  #
+  # Este Fragmento Do Código Varre Os Dígitos De [ 0,0,0,0 ] Ate [ 9,9,9,9]
+  #
+  
+  for a in range(10):
+    for b in range(10):
+      for c in range(10):
+        for d in range(10):
+
+          #
+          # Checa Se n Válido
+          #
+          
+          if ( (a != b) or (a != c) or (a != d) or (b != c) or (b != d) or ( c != d) ) :
+
+            #
+            # Monta Decimal
+            #
+            
+            n = a*10**3 + b*10**2 + c*10**1 + d*10**0
+
+            # print('(',n,',',Deep(n),')')
+
+            sNotes = chr(92) + 'notes'
+            if (M==1):
+              print('(',n,',',Deep(n,0),')')
+            if (M==2):
+              if (n<=72):
+                print(sNotes,NotaMusical(Deep(n,0)),'\enotes')
+                              
+            #
+            # Monta Histograma
+            #
+            
+            Stat[Deep(n,0)] = Stat[Deep(n,0)]+1
+
+            # 
+            # Incrementa Soluções
+            #
+            
+            s = s+1
+  
+          # else:
+            # print(a,b,c,d)   
+  
+  print(' ')
+  print('... Solutions ...')
+  print(' ')
+  print(s)
+  print(' ')
+  print('... Histogram ...')
+  print(' ')
+  for m in range(8):
+    print('(',m,',',Stat[m],')')
+
+sEXIT = True
+while (sEXIT):
+  os.system('clear')
+  print(' ')
+  print('Kaprekar analyzer | v 0.0.0')
+  print('© 2023 Jacques Timmermans')
+  print(' ')
+  print('... Actions ...')
+  print(' ')
+  print('S ... Scan')
+  print('D ... Depth')
+  print('E ... Exit')
+  print(' ')
+  PATH = input('? ')
+  sEXIT = not( (PATH == 'S' ) or (PATH == 'D') or (PATH == 'E') )
+if (PATH == 'S' ):
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    
+    print('Type of Scan')
+    print(' ')
+    print('0 ... Silent')
+    print('1 ... Points [n,p]')
+    print('2 ... Musical Notes')
+    print('9 ... Exit')
+    print(' ')
+    try:
+      OPC = int(input("? "))
+      sEXIT = not( (OPC == 0 ) or (OPC == 1) or (OPC == 2) or (OPC == 9) )
+    except:
+      print("O valor inserido precisa ser um número inteiro")
+      sEXIT = True
+  if (OPC != 9):
+    Analise(OPC)
+  else:
+    exit
+    
+if (PATH == 'D' ):
+  wEXIT = True
+  while (wEXIT):
+    sEXIT = True
+    while (sEXIT):
+      os.system('clear')
+      try:
+        NUM = int(input("Number ? "))
+        sEXIT = not( (NUM >=0 ) and (NUM <= 9999 ) )
+      except:
+        sEXIT = True
+    print(' ')
+    Deep(NUM,1)
+    print(' ')
+    alphaEXIT = input('Exit (Y|N) ? ')
+    wEXIT = not( (alphaEXIT == 'Y' ) )
+print(' ')
+print('Thank you for using the Kaprekar Analyzer!')
+
+# Fin
