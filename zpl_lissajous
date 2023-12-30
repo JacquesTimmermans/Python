@@ -1,0 +1,297 @@
+"""
+This is the Template Repl for Python with Turtle.
+
+Python with Turtle lets you make graphics easily in Python.
+
+https://docs.python.org/3/library/turtle.html
+
+Check out the official docs here: https://docs.python.org/3/library/turtle.html
+
+Turtle methods
+
+Turtle motion
+
+Move and draw
+
+forward() | fd()
+backward() | bk() | back()
+right() | rt()
+left() | lt()
+goto() | setpos() | setposition()
+setx()
+sety()
+setheading() | seth()
+home()
+circle()
+dot()
+stamp()
+clearstamp()
+clearstamps()
+undo()
+speed()
+
+Tell Turtle’s state
+
+position() | pos()
+towards()
+xcor()
+ycor()
+heading()
+distance()
+
+Setting and measurement
+
+degrees()
+radians()
+Pen control
+Drawing state
+
+pendown() | pd() | down()
+penup() | pu() | up()
+pensize() | width()
+pen()
+isdown()
+Color control
+color()
+pencolor()
+fillcolor()
+Filling
+filling()
+begin_fill()
+end_fill()
+
+More drawing control
+
+reset()
+clear()
+write()
+
+Turtle state
+
+Visibility
+
+showturtle() | st()
+hideturtle() | ht()
+isvisible()
+
+Appearance
+
+shape()
+resizemode()
+shapesize() | turtlesize()
+shearfactor()
+settiltangle()
+tiltangle()
+tilt()
+shapetransform()
+get_shapepoly()
+Using events
+onclick()
+onrelease()
+ondrag()
+
+Special Turtle methods
+
+begin_poly()
+end_poly()
+get_poly()
+clone()
+getturtle() | getpen()
+getscreen()
+setundobuffer()
+undobufferentries()
+
+Methods of TurtleScreen/Screen
+
+Window control
+
+bgcolor()
+bgpic()
+clearscreen()
+resetscreen()
+screensize()
+setworldcoordinates()
+
+Animation control
+
+delay()
+tracer()
+update()
+
+Using screen events
+
+listen()
+onkey() | onkeyrelease()
+onkeypress()
+onclick() | onscreenclick()
+ontimer()
+mainloop() | done()
+
+Settings and special methods
+
+mode()
+colormode()
+getcanvas()
+getshapes()
+register_shape() | addshape()
+turtles()
+window_height()
+window_width()
+Input methods
+textinput()
+numinput()
+
+Methods specific to Screen
+
+bye()
+exitonclick()
+setup()
+title()
+
+Turtle motion
+
+Move and draw
+forward() | fd()
+backward() | bk() | back()
+right() | rt()
+left() | lt()
+goto() | setpos() | setposition()
+setx()
+sety()
+setheading() | seth()
+home()
+circle()
+dot()
+stamp()
+clearstamp()
+clearstamps()
+undo()
+speed()
+
+Tell Turtle’s state
+
+position() | pos()
+towards()
+xcor()
+ycor()
+heading()
+distance()
+
+Setting and measurement
+
+degrees()
+radians()
+Pen control
+
+Drawing state
+
+pendown() | pd() | down()
+penup() | pu() | up()
+pensize() | width()
+pen()
+isdown()
+Color control
+color()
+pencolor()
+fillcolor()
+Filling
+filling()
+begin_fill()
+end_fill()
+
+More drawing control
+
+reset()
+clear()
+write()
+
+Turtle state
+
+Visibility
+showturtle() | st()
+hideturtle() | ht()
+isvisible()
+
+Appearance
+
+shape()
+resizemode()
+shapesize() | turtlesize()
+shearfactor()
+settiltangle()
+tiltangle()
+tilt()
+shapetransform()
+get_shapepoly()
+
+Using events
+
+onclick()
+onrelease()
+ondrag()
+
+Special Turtle methods
+begin_poly()
+end_poly()
+get_poly()
+clone()
+getturtle() | getpen()
+getscreen()
+setundobuffer()
+undobufferentries()
+
+"""
+
+# LISSAJOUS
+#
+# BY
+#
+# Jacques Timmermans
+#
+import turtle
+import math
+
+tar = turtle.Turtle()
+turtle.Screen().bgcolor("black")
+def Lissajous(CX,CY,A,B,W,Z):
+  for t in range(360):
+     theta = (t*math.pi/180)
+     x = CX + int(A*math.sin(W*theta))
+     y = CY + int(B*math.cos(Z*theta))
+     if (t == 0):
+       tar.color("white")
+       tar.pu()
+     else:
+       tar.color("blue")
+       tar.pd()
+     tar.goto(x,y)
+     tar.hideturtle()
+def Painel():
+  for j in range(8):
+    for i in range(6):
+      cx = -155 + 60*i
+      cy = +220 - 60*j
+      Lissajous(cx,cy,25,25,i+1,j+1)
+def Deborah():
+  j = 0
+  c = 0.8
+  x = 0.5
+  y = 0.33
+  while (j<1000):
+    x = (100+20*math.sin(y))*math.sin((x - math.cos(0.05*x * y*y))*c)
+    y = (50+30*math.cos(x))*math.cos((- y + math.sin(0.05*y * x*x))*c)
+    j = j + 1
+    n = abs(x) % 2
+    if ( x*y > 0 ): 
+      tar.color("red")
+    else:
+      if ( x*y < 0 ): 
+        tar.color("blue")
+    tar.goto(int(x),int(y))
+    # tar.pd()
+    # tar.dot()
+    # tar.pu()
+    tar.hideturtle()
+Painel()
+# Deborah()
+# END
