@@ -1,0 +1,23 @@
+#
+# Estudo Cosseno Recursivo
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import math
+
+def Recursiva(m):
+  x = 0
+  j = 0
+  while (j<=m):
+    x = math.cos(x)
+    j = j + 1
+  return x
+
+def AnaliseCossine(m):
+  for j in range(m):
+    print('(', j, ',', Recursiva(j), ')')
+
+AnaliseCossine(100)
