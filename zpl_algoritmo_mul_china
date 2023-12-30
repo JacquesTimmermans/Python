@@ -1,0 +1,27 @@
+#
+# Estudo Do Pseudo~Algoritmo Chinês De Multiplicação
+# 
+# by Timmermans, Jacques
+#
+
+import math
+
+def Analise(M):
+  s = 0
+  for x in range(10):
+    for y in range(10):
+      for z in range(10):
+        for j in range(10):
+          for k in range(10):
+            for l in range(10):
+              n = x*10**2 + y*10 + z
+              m = j*10**2 + k*10 + l
+              u = x*j*10**4 + (x*l + j*z)*10**2 + z*l 
+              w = n*m
+              if (u == w) :
+                print(n,m)
+                s = s + 1
+  print('Pseudo-Algoritmo Multiplicação Chinesa')
+  print('Soluções = ', s)
+  print('Soluções Únicas = ', s // 2)
+Analise(0)
