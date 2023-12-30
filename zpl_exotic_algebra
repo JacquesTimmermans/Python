@@ -1,0 +1,73 @@
+#
+# Exotic Algebra Problem Solver
+#
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+
+import os
+
+def Analise(m):
+
+  maxOp = 5
+
+  Op = [ '+', '-', '*', '/', '**' ]
+
+  print(' ')
+  print('x ? y ? w ? z = r')
+  print(' ')
+
+  x = int(input("x ? "))
+  y = int(input("y ? "))
+  w = int(input("w ? "))
+  z = int(input("z ? "))
+  r = int(input("r ? "))
+  print(' ')
+
+  s = 1
+  f = 0
+
+  print('... Mode ...')
+  print(' ')
+  print('0 ... List')
+  print('1 ... Solve')
+  print(' ')
+  modo = int(input("? "))
+  print(' ')
+
+  for i in range(maxOp):
+    for j in range(maxOp):
+      for k in range(maxOp):
+
+        Expr = chr(48+x) + Op[i] + chr(48+y) + Op[j] + chr(48+w) + Op[k] + chr(48+z)
+
+        if ( ( s != 124 ) and (s != 125) ):
+
+          if (modo == 0):
+            print(s,' ', Expr, ' = ', eval(Expr))
+          if (modo == 1):
+            if (eval(Expr) == r ):
+              print(Expr, ' = ', r)
+              f = 1
+        else:
+          if (modo == 0):
+            print(s,' ', Expr, ' = ', 'Overflow')
+        s = s + 1
+
+  if ( (modo == 1) and ( f == 0 ) ):
+    print('Exotic problem without solution')
+  print(' ')  
+  print('Case Closed')
+
+def Exotikka():
+  os.system('clear')
+  print(' ')
+  print('Exotic Algebra Problem Solver | v 0.0')
+  print('© 2023 Jacques Timmermans')
+  Analise(0)
+  print(' ')
+  print('Thank you for using the Exotic Algebra Problem Solver!')
+
+Exotikka()
