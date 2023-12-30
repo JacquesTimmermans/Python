@@ -1,0 +1,94 @@
+#
+# Statistical Pi Calculator 
+#
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+import random
+
+def completaZeros(s,max):
+  j = 0
+  sOUT = s
+  while ( j <= ( max - len(s) ) ):
+    sOUT = chr(48) + sOUT
+    j = j + 1
+  return sOUT
+
+def Pi(n):
+  j = 0
+  s = 0
+  while (j <= n):
+    x = random.random()
+    y = random.random()
+    if (x**2 + y**2 <= 1):
+      s = s+1
+    j = j + 1
+  Pi = 4*(s/n)
+  return Pi
+
+def AnalisePi(MAX):
+  n = 1
+  for i in range(MAX+1):
+    LineInfo = "n = " + str(i) + " (" + completaZeros(str(n),MAX) + ") π = " + str(Pi(n))
+    print(LineInfo)
+    n = n*10
+
+def GraficoPi(max):
+  for i in range(max):
+    Coordinate = '('+ str(i+1) + ',' + str(Pi(i+1))+')'
+    print(Coordinate)
+
+def Principal():
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    print(' ')
+    print('Statistical Pi Calculator | v 0.0')
+    print('© 2023 Jacques Timmermans')
+    print(' ')
+    print('... Actions ...')
+    print(' ')
+    print('L ... List')
+    print('G ... Graph')
+    print('E ... Exit')
+    print(' ')
+    PATH = input('? ')
+    sEXIT = not( (PATH == 'L' ) or (PATH == 'G') or (PATH == 'E') )
+  if (PATH == 'L' ):
+    sEXIT = True
+    while (sEXIT):
+      os.system('clear')
+      print('⟨ List ⟩')
+      print(' ')
+      try:
+        MAX = int(input("Max ? "))
+        sEXIT = not( (MAX > 0 ) )
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    print(' ')
+    AnalisePi(MAX)
+
+  if (PATH == 'G' ):
+    os.system('clear')
+    print('⟨ Graph ⟩')
+    print(' ')
+    sEXIT = True
+    while (sEXIT):
+      try:
+        max = int(input("Max ? "))
+        sEXIT = False
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    print(' ')
+    GraficoPi(max)
+  print(' ')
+  print('Thank you for using the Statistical Pi Calculator')
+
+Principal()
