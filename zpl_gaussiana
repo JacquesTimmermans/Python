@@ -1,0 +1,449 @@
+#
+# Gaussiana 
+#
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+#
+
+import os
+import sys
+import time
+import matplotlib.pyplot as plt
+import math
+import random
+
+MAXDivisions = 33
+MAXLevelStudy = 12
+MAXExperiments = 5
+
+G = [0]*MAXDivisions
+H = [0]*MAXDivisions
+D = [ [ 0,0,0 ] ]*MAXLevelStudy
+
+def Listas():
+
+  x = []
+  n = []
+
+  x.append('A')
+  x.append('B')
+  x.append('C')
+
+  n.append(1)
+  n.append(2)
+  n.append(3)
+  n.append(4)
+
+  print(x)
+  print(n)
+  print(len(x))
+  print(len(n))
+
+def GraficoMathPlotLib():
+
+  x = [ '-8', '-7', '-6', '-5', '-4', '-3', '-2', '-1', '0', '1', '2', '3', '4', '5' ]
+  
+  n = [ 0,0,1,0,3,13,29,37,44,38,23,6,4,2 ]
+
+  plt.bar(x,n)
+  plt.xlabel('x') 
+  plt.ylabel('n')
+  plt.title('Gaussiana') 
+
+  plt.show()
+
+def nS(s,vMAX,CodeAscii):
+  lString = ''
+  for j in range(20):
+    lString = lString + chr(CodeAscii)
+  n = vMAX - len(s) + 1
+  addString = lString[1:n]
+  newString = addString + s
+  return newString
+
+def TIMMERmans(TIMMER):
+  
+  hTIME = TIMMER // 3600
+  
+  mTIME = (TIMMER-hTIME*3600)//60
+  sTIME = (TIMMER-hTIME*3600-mTIME*60)
+  dTIME = sTIME - int(sTIME)
+
+  alphahTIME = nS(str(int(hTIME)),2,48)
+  alphamTIME = nS(str(int(mTIME)),2,48)
+  alphasTIME = nS(str(int(sTIME)),2,48)
+  alphadTIME = f'{dTIME:,.6f}'[2:8]
+  
+  alphaTIME = alphahTIME + ':' + alphamTIME + ':' + alphasTIME + '.' + alphadTIME
+  
+  return alphaTIME
+
+def adjustEXPONENTIAL():
+  sumx = 0
+  sumx2 = 0
+  sumxz = 0
+  sumz = 0
+  print(' ')
+  print('ln 2 = '+str(math.log(2)))
+  print('ln 3 = '+str(math.log(3)))
+  print(' ')
+  print('... Data ...')
+  print(' ')
+  
+  for j in range(MAXLevelStudy):
+    sumx = sumx + (D[j][0]+1)
+    sumx2 = sumx2 + (D[j][0]+1)**2
+    sumxz = sumxz + (D[j][0]+1)*D[j][2]
+    sumz = sumz + D[j][2]
+    print(D[j][0]+1,' ',D[j][1],' ',D[j][2])
+    
+  sumn = MAXLevelStudy
+    
+  print(' ')
+  print('... Results ...')
+  print(' ')
+  print('∑ x  = ' + str(sumx) )
+  print('∑ x² = ' + str(sumx2) )
+  print('∑ z  = ' + str(sumz) )
+  print('∑ xz = ' + str(sumxz) )
+  print('n    = ' + str(MAXLevelStudy))
+  sx  = nS(f'{sumx:,.0f}',5,32)
+  sx2 = nS(f'{sumx2:,.0f}',5,32)
+  sz  = nS(f'{sumz:,.3f}',11,32)
+  sxz = nS(f'{sumxz:,.3f}',11,32)
+  sn  = nS(f'{sumn:,.0f}',5,32)
+  print(' ')
+  print('... Linear System ...')
+  print(' ')
+  la = '⎛' + ' ' + sx2 + ' ' + sx + ' ' + '⎞' + '⎛' + ' a ' + '⎞' + '   ' + '⎛' + ' ' + sxz + ' ' + '⎞'
+  
+  lb = '⎜' + nS(' ',13,32) + '⎟⎜   ⎟ = ⎜' + nS(' ',13,32) + '⎟'
+
+  lc = '⎝' + ' ' + sx + ' ' + sn + ' ' + '⎠' + '⎝ b ⎠' + '   ' + '⎝' + ' ' + sz + ' ' + '⎠'
+  
+  print(la)
+  print(lb)
+  print(lc)
+
+  print(' ')
+  print('... Solution ...')
+  
+  deti = (sumx2*sumn - sumx**2)
+  deta = (sumxz*sumn - sumx*sumz)
+  detb = (sumx2*sumz - sumxz*sumx)
+  
+  a = deta / deti
+  b = detb / deti
+
+  print(' ')
+  print('... a ...')
+  print(' ')
+  print(a)
+
+  print(' ')
+  print('... b ...')
+  print(' ')
+  print(b)
+
+  print(' ')
+  print('... Exponential ...')
+
+  print(' ')
+  print('... C ... ')
+  print(' ')
+  print(math.exp(b))
+
+  print(' ')
+  print('... k ... ')
+  print(' ')
+  print(a)
+  
+  return
+
+def zeraMATRIX():
+  for i in range(MAXDivisions):
+    G[i] = 0
+    H[i] = 0
+  return
+
+def maxpeakMATRIX(MXD):
+  max = 0
+  for i in range(MXD):
+    if ( H[i] > max ):
+      max = H[i]
+      idx = i
+  return idx
+
+def calcGAUSSIANA(MAXpoints,MAXLevels,gPRINT,typeA):
+
+  zeraMATRIX()
+
+  if (gPRINT == 1):
+    print('')
+
+  for j in range(MAXpoints):
+
+    pos = 0
+
+    for i in range(MAXLevels):
+
+      random.seed(a=None,version=2)
+      mov = random.randint(0,1)
+
+      if (mov == 0):
+        pos = pos + 1
+      else:
+        pos = pos - 1
+
+    idxG = (MAXDivisions+1)//2 + pos
+
+    G[idxG] = G[idxG] + 1
+
+  j = 0
+  for i in range(MAXDivisions):
+    if (G[i] != 0):
+      H[j] = G[i]
+      j = j + 1
+
+  realMAX = j - 1
+
+  if ( gPRINT == 1 ):
+    
+    print('... Matrix Data ...')
+    print(' ')
+    
+    j = 0
+    while (j <= realMAX):
+      lINFO = 'H[' + str(j) + '] = ' + str(H[j])
+      print(lINFO)
+      j = j + 1
+
+  # Determinação do Pico
+
+  peakMTX = maxpeakMATRIX(MAXDivisions)
+
+  if ( gPRINT == 1 ): 
+    print(' ')
+    print('... Peak ...')
+    print(peakMTX)
+    print(' ')
+
+  # Check && Soma
+
+  Check = 0
+  Soma = 0
+
+  for j in range(realMAX+1):
+    Check = Check + H[j]
+    xleg = -peakMTX+j
+    Soma = Soma + xleg*H[j]
+
+  # Cálculo Da Média
+
+  Media = Soma / MAXpoints
+
+  # Calculo Do Desvio Padrão
+
+  Soma = 0
+  for j in range(realMAX+1):
+    xleg = -peakMTX+j
+    Soma = Soma + H[j]*(xleg - Media)**2
+
+  DesvioPadrao = math.sqrt( Soma / MAXpoints)
+
+  # Determinação Do Espaço Real
+  
+  realSPACE = 0
+  for k in range(realMAX+1):
+    if (H[k] != 0):
+      realSPACE = realSPACE+1
+
+  # Impressão Dos Dados
+
+  if ( gPRINT == 1 ): 
+
+    print('... Check ...')
+    print(Check)
+    print(' ')
+    print('... Média ...')
+    print(Media)
+    print(' ')
+    print('... Desvio Padrão ...')
+    print(DesvioPadrao)
+    print(' ')
+    print('... Real Space ...')
+    print(realSPACE)
+    print(' ')
+    print('... Plot Points ...')
+    print(' ')
+
+    for j in range(realMAX+1):
+      xleg = -peakMTX+j
+      lINFO = '(' + str(xleg) + ',' + str(H[j]) + ')'
+      print(lINFO)
+
+  if (typeA == 1):
+    rtn = Check
+  if (typeA == 2):
+    rtn = realSPACE
+
+  return rtn
+
+def Gaussiana():
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      m = int(input('Number of samples [ 1000 ] ? '))
+      sEXIT = not(m > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  sEXIT = True
+  while (sEXIT):
+    try:
+      l = int(input('Number of levels [ 16 ] ? '))
+      sEXIT = not(l > 0)
+    except:
+      print("Please enter a numerical value")
+      sEXIT = True
+
+  calcGAUSSIANA(m,l,1,1)
+
+def LevelAnalysis():
+  for j in range(23):
+    lREAL = calcGAUSSIANA(100,j+12,0,2)
+    lINFO = '(' + str(j+12) + ',' + str(lREAL) + ')'
+    print(lINFO)
+
+def IntegrityAnalysis():
+  iTT = 0
+  for j in range(23):
+    chk = calcGAUSSIANA(5000,j+1,0,1)
+    if (chk == 5000):
+      print('Level = ' + str(j+1) + ' ... Ok')
+      iTT = iTT + 1
+    # else:
+      # print('Level = ' + str(j+3)+ ' ... Failed')
+
+  print('... Total ...')
+  print(iTT)
+
+def LevelCurve():
+
+  startTIME = time.time()
+  print('START ',TIMMERmans(0))
+  print(' ')
+  
+  for j in range(MAXLevelStudy):
+    
+    transitPT = 1
+    flagSEARCH = True
+      
+    while flagSEARCH:
+
+      soma = 0
+
+      for experimento in range(MAXExperiments):
+        
+        lREAL = calcGAUSSIANA(transitPT,j+1,0,2)
+
+        soma = soma + lREAL
+
+        media = int(soma / MAXExperiments)
+        
+      if ( (j+1)+1 <= media ):
+        flagSEARCH = False
+      else:
+        transitPT = transitPT+1
+        
+      if ( transitPT % 100 == 0 ):
+        print(' transit = ' + str(transitPT))
+        
+    endTIME = time.time()
+
+    lINFO = '(' + str(j+1) + ',' + str(transitPT) + ')' + ' :: ' + TIMMERmans(endTIME-startTIME)
+        
+    print(lINFO)
+
+    D[j] = [ j, transitPT, math.log(transitPT)]
+        
+def Principal():
+
+  wEXIT = True
+  while (wEXIT):
+
+    sEXIT = True
+    while (sEXIT):
+
+      os.system('clear')
+      print(' ')
+      print('Gaussiana Calculator | v 0.0')
+      print('© 2023 Jacques Timmermans')
+      print(' ')
+
+      print('... General Control ...')
+      print(' ')
+      print('1 ... Graph Generator')
+      print('2 ... Level Analysis')
+      print('3 ... Integrity Analysis')
+      print('4 ... MathPlotLib')
+      print('5 ... Exit')
+
+      print(' ')
+
+      try:
+        FUNC = int(input('? '))
+        CND = ( (FUNC >= 1) and (FUNC <= 5 ) )
+        sEXIT = not(CND)
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+
+    os.system('clear')
+
+    if (FUNC == 1):
+      print('... Graph Generator ...')
+      print(' ')
+      Gaussiana()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 2):
+      print('... Level Analysis ...')
+      print(' ')
+      # LevelAnalysis()
+      LevelCurve()
+      adjustEXPONENTIAL()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 3):
+      print('... Integrity Analysis ...')
+      print(' ')
+      IntegrityAnalysis()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 4):
+      print('... MathPlotLib ...')
+      print(' ')
+      GraficoMathPlotLib()
+      print(' ')
+      anyKEY = input('Press «ENTER» to Continue ')
+      wEXIT = True
+
+    if (FUNC == 5):
+      wEXIT = False
+
+  print('Thank you for using the Gaussiana Calculator!')
+  sys.exit()
+
+Principal()
