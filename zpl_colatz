@@ -1,0 +1,32 @@
+#
+# Estudo Colatz
+#
+# by
+#
+# Jacques Timmermans
+#
+
+def Colatz(n,t):
+  s = 0
+  cltz = n
+  while ( cltz != 1 ):
+    oldcltz = cltz
+    if ( cltz % 2 == 0 ):
+      cltz = cltz // 2
+    else:
+      cltz = 3 * cltz +1
+    s = s + 1
+    if (t == 0):
+      print(s, ' ... ', oldcltz , ' ... ', cltz)
+    if (t == 1):
+      print('(', s, ',', oldcltz,')')
+  if ( t == 1):
+    print('(', s+1, ',', 1,')')
+  return s
+
+def Analise (m):
+  for j in range(m):
+    print('(', j+1 , ',', Colatz(j+1),')')
+
+# Analise(100)
+Colatz(97,1)
