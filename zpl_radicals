@@ -1,0 +1,103 @@
+#
+# Expression Simplifier with radicals
+# 
+# v 0.0
+#
+# by
+#
+# Jacques Timmermans
+
+import os
+import math
+
+def Simplifica(a,b):
+  if (a**2 > b):
+    c = math.sqrt(a**2 - b)
+    x = (a + c) / 2
+    y = (a - c) / 2
+    w = int((a + c) // 2)
+    z = int((a - c) // 2)
+    if ( (x == w ) and (y == z) and (x>0) and (y>0) ):
+      if (z != 1):
+        sPRO = '√(' + str(a) + '+√' + str(b) + ') = '
+        sOUT = '√' + str(w) + '+√' + str(z)
+      else:
+        sPRO = '√(' + str(a) + '+√' + str(b) + ') ='
+        sOUT = '√' + str(w) + '+' + str(z)
+    else:
+      sPRO = '√(' + str(a) + '+√' + str(b) + ') ='
+      sOUT = '[√½(' + str(a) + '+√'+ str(a**2-b) + ')]+√[½(' + str(a) + '-√'+ str(a**2-b) + ')]'
+    eSOL = math.sqrt( ( a + c ) / 2) + math.sqrt( ( a - c) / 2 )
+    if (eSOL == int(eSOL) ):
+      print(sPRO,str(int(eSOL)))
+    else:
+      eRAD = a + math.sqrt(b)
+      if ( eRAD == int(eRAD) ):
+        sRAD = '√'+str(int(eRAD))
+        print(sPRO,sRAD)
+      else:
+        print(sPRO,sOUT)
+
+def Analise(m):
+  print(' ')
+  for a in range(m):
+    for b in range(m):
+      Simplifica(a,b)
+
+def Radical():
+  sEXIT = True
+  while (sEXIT):
+    os.system('clear')
+    print(' ')
+    print('Expression Simplifier with radicals | v 0.0')
+    print('© 2023 Jacques Timmermans')
+    print(' ')
+    print('... Actions ...')
+    print(' ')
+    print('L ... List')
+    print('N ... Number')
+    print('E ... Exit')
+    print(' ')
+    PATH = input('? ')
+    sEXIT = not( (PATH == 'L' ) or (PATH == 'N') or (PATH == 'E') )
+  if (PATH == 'L' ):
+    sEXIT = True
+    while (sEXIT):
+      os.system('clear')
+      print('Scan [ m × m ] ')
+      print(' ')
+      try:
+        OPC = int(input("m ? "))
+        sEXIT = not( (OPC > 0 ) )
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    Analise(OPC)
+  print(' ')
+
+  if (PATH == 'N' ):
+    os.system('clear')
+    print('√(a + √b)')
+    print(' ')
+    sEXIT = True
+    while (sEXIT):
+      try:
+        a = int(input("a ? "))
+        sEXIT = False
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    sEXIT = True
+    while (sEXIT):
+      try:
+        b = int(input("b ? "))
+        sEXIT = False
+      except:
+        print("Please enter a numerical value")
+        sEXIT = True
+    print(' ')
+    Simplifica(a,b)
+  print(' ')
+  print('Thank you for using the Expression Simplifier with radicals!')
+
+Radical()
