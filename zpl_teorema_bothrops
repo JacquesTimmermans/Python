@@ -1,0 +1,208 @@
+#
+# Cálculo do gcd(a,b)
+# 
+# Mediante
+#
+# O
+#
+# Teorema Bothrops Alternatus,
+#
+# gcd(a,b) = nps(bmx(sedpb(a) AND dpb(b)))
+# 
+# by
+# 
+# Jacques Timmermans
+#
+import math
+#
+# Função Contagem
+#
+def nps(BINARIO):
+	MAX = len(BINARIO)
+	t = 1
+	j = 1
+	while ( (j<=MAX) and ( t == 1 ) ):
+		if (BINARIO[MAX-j] == '0') :
+			j = j+1
+		else:
+			t = 0;
+	return j
+#
+# BIT Máximo
+#
+def bmx(seq):
+   smax = ""
+   MAX = len(seq)
+   bMAX = 0
+   for i in range(MAX):
+   	# print(seq[MAZ-i+1])
+   	if ( seq[MAX-i-1] == '1' ) :
+   		bMAX = i
+   for j in range(MAX):
+   	if (j == bMAX):
+   		smax += '1'
+   	else:
+   		smax += '0'
+   MAX = len(smax);
+   smay = "";
+   for k in range(MAX):
+        if (smax[MAX-k-1] == '1') :
+            smay += '1'
+        else:
+            smay += '0'
+   return smay
+#
+# Operação AND Entre Binários 
+#
+def ebn(abin,bbin):
+   sbin = ''
+   x = len(abin)
+   y = len(bbin)
+   z = abs(x - y)#
+# Cálculo do gcd(a,b)
+# 
+# Mediante
+#
+# O
+#
+# Teorema Bothrops Alternatus,
+#
+# gcd(a,b) = nps(bmx(dpb(a) AND dpb(b)))
+# 
+# by
+# 
+# Jacques Timmermans
+#
+import math
+#
+# Função Contagem
+#
+def nps(BINARIO):
+	MAX = len(BINARIO)
+	t = 1
+	j = 1
+	while ( (j<=MAX) and ( t == 1 ) ):
+		if (BINARIO[MAX-j] == '0') :
+			j = j+1
+		else:
+			t = 0;
+	return j
+#
+# BIT Máximo
+#
+def bmx(seq):
+   smax = ""
+   MAX = len(seq)
+   bMAX = 0
+   for i in range(MAX):
+   	# print(seq[MAZ-i+1])
+   	if ( seq[MAX-i-1] == '1' ) :
+   		bMAX = i
+   for j in range(MAX):
+   	if (j == bMAX):
+   		smax += '1'
+   	else:
+   		smax += '0'
+   MAX = len(smax);
+   smay = "";
+   for k in range(MAX):
+        if (smax[MAX-k-1] == '1') :
+            smay += '1'
+        else:
+            smay += '0'
+   return smay
+#
+# Operação AND Entre Binários 
+#
+def ebn(abin,bbin):
+   sbin = ''
+   x = len(abin)
+   y = len(bbin)
+   z = abs(x - y)
+   lft = ""
+   for i in range(z):
+     lft += '0'
+   ybin = ''
+   xbin = ''
+   if (x >= y):
+       xbin += abin
+       ybin += lft
+       ybin += bbin
+   lft = ""
+   for i in range(z):
+     lft += '0'
+   ybin = ''
+   xbin = ''
+   if (x >= y):
+       xbin += abin
+       ybin += lft
+       ybin += bbin
+       MAX = x
+   else:
+       ybin += bbin
+       xbin += lft
+       xbin += abin
+       MAX = y
+   # print('x = ',x,'y = ',y,'z = ',z)
+   print('xbin    = ',xbin)
+   print('ybin    = ',ybin)
+   for j in range(MAX):
+      if ( ( xbin[j] == '1' ) and ( ybin[j] == '1') ) :
+          sbin += '1'
+      else:
+          sbin += '0'
+   return sbin
+#
+# Deep Number Binário
+#
+def dpb(n):
+    deep = ''
+    for i in range(n):
+        if (n % ( i + 1) == 0):
+            deep += '1'
+        else:
+            deep += '0'
+    MAX = len(deep)
+    seq =''
+    for i in range(MAX):
+        if (deep[MAX-i-1] == '1') :
+            seq += '1'
+        else:
+            seq += '0'
+    return seq
+#
+# Main
+# 
+print('Bothrops Alternatus Theorem')
+print('gcd(a,b) = nps(bmx(dpb(a) AND dpb(b)))')
+print('gcd(a,b) calculator')
+print('..........................................')
+a = int(input('a ? '))
+b = int(input('b ? '))
+#
+print('..........................................')
+print('dpb() ... Binary Deep Numbers')
+print('..........................................')
+print('dpb(',a,') = ',dpb(a))
+print('dpb(',b,') = ',dpb(b))
+print(' ')
+#
+print('..........................................')
+print('AND Operation')
+print('..........................................')
+print('a AND b = ',ebn(dpb(a),dpb(b))   )
+print(' ')
+#
+print('..........................................')
+print('bmx() ... Maximum bit')
+print('..........................................')
+print('bit máx = ',bmx(ebn(dpb(a),dpb(b)))  )
+print(' ')
+#
+# Saida
+#
+print('..........................................')
+print('Output')
+print('..........................................')
+print('gcd(',a,',',b,') = ',nps(bmx(ebn(dpb(a),dpb(b)))))
+# Fim
